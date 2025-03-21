@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface ReadingRepositoryInterface
 {
-    public function all(): Collection;
+    public function all(string $startDate): Collection;
 
     public function create(array $data): void;
 }

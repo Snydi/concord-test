@@ -15,9 +15,9 @@ class ReadingService
         $this->readingRepository = $readingRepository;
     }
 
-    public function getSensorData(): Collection
+    public function getSensorData(string $startDate): Collection
     {
-        $data = $this->readingRepository->all();
+        $data = $this->readingRepository->all($startDate);
         $data = $data->groupBy('readingType.name');
 
         return $data->map(function ($readings, $type) {
@@ -46,8 +46,9 @@ class ReadingService
         })->values();
     }
 
-    public function addSensorValue(int $readingTypeId, int $value): void
+    public function addSensorValue(int $readingTypeId, string $stringValue): void
     {
+        $value = explode("=", $stringValue)[1];
         $this->readingRepository->create(['reading_type_id' => $readingTypeId, 'value' => $value]);
     }
 }

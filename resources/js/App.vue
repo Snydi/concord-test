@@ -4,7 +4,15 @@
             <LineChart :chartData="data" :chartOptions="chartOptions" class="chart-item"/>
         </div>
     </div>
-    <button class="submit-button" @click="getSensorData">Refresh</button>
+    <div class="controls">
+        <select v-model="selectedPeriod" class="period-select">
+            <option value="1h">Last 1 Hour</option>
+            <option value="1d">Last 1 Day</option>
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+        </select>
+        <button class="submit-button" @click="getSensorData">Refresh</button>
+    </div>
 </template>
 
 <script>
@@ -16,7 +24,7 @@ export default {
     data() {
         return {
             chartData: [],
-            inputValues: [],
+            selectedPeriod: '1h',
             chartOptions: {
                 responsive: true,
                 scales: {
@@ -33,13 +41,16 @@ export default {
     },
     methods: {
         async getSensorData() {
-            const response = await axios.get(`/api/sensors`);
+            const response = await axios.get(`/api/sensors`, {
+                params: {
+                    period: this.selectedPeriod
+                }
+            });
             this.chartData = response.data;
         }
     },
     mounted() {
         this.getSensorData();
-        this.inputValues = new Array(this.chartData.length).fill('');
     }
 }
 </script>

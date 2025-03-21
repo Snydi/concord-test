@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetReadingRequest;
 use App\Http\Requests\StoreReadingRequest;
 use App\Services\ReadingService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
 
@@ -16,18 +18,18 @@ class ReadingController extends Controller
         $this->readingService = $readingService;
     }
 
-    public function index(): JsonResponse
+    public function index(GetReadingRequest $request): JsonResponse
     {
-        return response()->json($this->readingService->getSensorData());
+        $period = $request->query('period', '7d');
+        $startDate = Carbon::now()->sub($period);
+        return response()->json($this->readingService->getSensorData($startDate));
     }
 
     public function store(StoreReadingRequest $request): JsonResponse
     {
-        //TODO add try catch
         $readingTypeId = $request->query('sensor');
         $stringValue = $request->getContent();
-        $value = explode("=", $stringValue)[1];
-        $this->readingService->addSensorValue($readingTypeId, $value);
+        $this->readingService->addSensorValue($readingTypeId, $stringValue);
         return response()->json(['status' => 'success']);
     }
 }
