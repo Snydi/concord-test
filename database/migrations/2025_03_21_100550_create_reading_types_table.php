@@ -6,24 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('readings_history', function (Blueprint $table) {
+        Schema::create('reading_types', function (Blueprint $table) {
             $table->id();
-            $table->integer('value');
-            $table->foreignId('type_id');
+            $table->string('name');
+            $table->string('border_color');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('readings_history');
+        Schema::dropIfExists('reading_types');
     }
 };
