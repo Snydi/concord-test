@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\belongsTo;
 
 class Reading extends Model
 {
-    protected $fillable = ['value', 'borderColor', 'type_id'];
+    protected $fillable = ['value', 'borderColor', 'reading_type_id'];
 
     public function readingType(): belongsTo
     {

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreReadingRequest;
 use App\Services\ReadingService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+
 
 class ReadingController extends Controller
 {
@@ -20,9 +21,13 @@ class ReadingController extends Controller
         return response()->json($this->readingService->getSensorData());
     }
 
-
-    public function store(Request $request) //TODO make a request here
+    public function store(StoreReadingRequest $request): JsonResponse
     {
-
+        //TODO add try catch
+        $readingTypeId = $request->query('sensor');
+        $stringValue = $request->getContent();
+        $value = explode("=", $stringValue)[1];
+        $this->readingService->addSensorValue($readingTypeId, $value);
+        return response()->json(['status' => 'success']);
     }
 }

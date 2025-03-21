@@ -1,13 +1,10 @@
 <template>
     <div class="chart-container">
-        <LineChart
-            v-for="(data, index) in chartData"
-            :key="index"
-            :chartData="data"
-            :chartOptions="chartOptions"
-            class="chart-item"
-        />
+        <div v-for="(data, index) in chartData" :key="index" class="chart-wrapper">
+            <LineChart :chartData="data" :chartOptions="chartOptions" class="chart-item"/>
+        </div>
     </div>
+    <button class="submit-button" @click="getSensorData">Refresh</button>
 </template>
 
 <script>
@@ -19,6 +16,7 @@ export default {
     data() {
         return {
             chartData: [],
+            inputValues: [],
             chartOptions: {
                 responsive: true,
                 scales: {
@@ -41,6 +39,7 @@ export default {
     },
     mounted() {
         this.getSensorData();
+        this.inputValues = new Array(this.chartData.length).fill('');
     }
 }
 </script>

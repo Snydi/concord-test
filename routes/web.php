@@ -4,12 +4,10 @@ use App\Http\Controllers\ReadingController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('api')->group(function () {
-    Route::prefix('sensors')->group(function () {
-        Route::get('/', [ReadingController::class, 'index']);
-        Route::post('/', [ReadingController::class, 'store']);
-    });
-});
+    Route::get('/', [ReadingController::class, 'store']);
 
-Route::get('/', function () {
+    Route::get('/sensors', [ReadingController::class, 'index']);
+});
+Route::get('/{any}', function () {
     return view('layouts.app');
 })->where('any', '.*');

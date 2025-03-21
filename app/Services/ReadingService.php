@@ -23,10 +23,13 @@ class ReadingService
         return $data->map(function ($readings, $type) {
             $timestamps = [];
             $values = [];
+            $borderColor = 'black';
+
             foreach ($readings as $reading) {
                 $timestamp = Carbon::parse($reading->created_at);
                 $timestamps[] = $timestamp->format('M j, Y');
                 $values[] = $reading->value;
+                $borderColor = $reading->readingType['border_color'];
             }
 
             return [
@@ -35,11 +38,16 @@ class ReadingService
                     [
                         'label' => $type,
                         'data' => $values,
-                        'borderColor' => 'red',
+                        'borderColor' => $borderColor,
                         'fill' => false
                     ]
                 ]
             ];
         })->values();
+    }
+
+    public function addSensorValue(int $readingTypeId, int $value): void
+    {
+        $this->readingRepository->create(['reading_type_id' => $readingTypeId, 'value' => $value]);
     }
 }
